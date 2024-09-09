@@ -10,6 +10,7 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { setPosts, setSelectedPost } from '@/redux/postSlice'
 import { Badge } from './ui/badge'
+import { Link } from 'react-router-dom'
 
 const Post = ({ post }) => {
     const [text, setText] = useState("");
@@ -98,8 +99,8 @@ const Post = ({ post }) => {
 
     const bookmarkHandler = async () => {
         try {
-            const res = await axios.get(`${API_END_POINT}/api/v1/post/${post?._id}/bookmark`, {withCredentials:true});
-            if(res.data.success){
+            const res = await axios.get(`${API_END_POINT}/api/v1/post/${post?._id}/bookmark`, { withCredentials: true });
+            if (res.data.success) {
                 toast.success(res.data.message);
             }
         } catch (error) {
@@ -107,36 +108,38 @@ const Post = ({ post }) => {
         }
     }
     return (
-        <div className='my-8 w-full max-w-sm mx-auto'>
+        <div className='my-8 w-full max-w-md md:mx-40'>
             <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-2'>
-                    <Avatar>
-                        <AvatarImage src={post.author?.profilePicture} alt="post_image" />
-                        <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className='flex items-center gap-3'>
-                        <h1>{post.author?.username}</h1>
-                       {user?._id === post.author._id &&  <Badge variant="secondary">Author</Badge>}
+                <Link to={`/profile/${post.author._id}`}>
+                    <div className='flex items-center gap-2'>
+                        <Avatar>
+                            <AvatarImage src={post.author?.profilePicture} alt="post_image" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <div className='flex items-center gap-3'>
+                            <h1>{post.author?.username}</h1>
+                            {user?._id === post.author._id && <Badge variant="secondary">Author</Badge>}
+                        </div>
                     </div>
-                </div>
+                </Link>
                 <Dialog>
                     <DialogTrigger asChild>
                         <MoreHorizontal className='cursor-pointer' />
                     </DialogTrigger>
                     <DialogContent className="flex flex-col items-center text-sm text-center">
                         {
-                        post?.author?._id !== user?._id && <Button variant='ghost' className="cursor-pointer w-fit text-[#ED4956] font-bold">Unfollow</Button>
+                            post?.author?._id !== user?._id && <Button variant='ghost' className="cursor-pointer w-fit text-[#ED4956] font-bold">Unfollow</Button>
                         }
 
-                        <Button variant='ghost' className="cursor-pointer w-fit">Add to favorites</Button>
+                        <Button variant='ghost' className="cursor-pointer w-fit dark:text-white">Add to favorites</Button>
                         {
-                            user && user?._id === post?.author._id && <Button onClick={deletePostHandler} variant='ghost' className="cursor-pointer w-fit">Delete</Button>
+                            user && user?._id === post?.author._id && <Button onClick={deletePostHandler} variant='ghost' className="cursor-pointer w-fit dark:text-white">Delete</Button>
                         }
                     </DialogContent>
                 </Dialog>
             </div>
             <img
-                className='rounded-sm my-2 w-full aspect-square object-cover'
+                className='rounded-sm my-2 w-full aspect-square object-cover pointer-events-none'
                 src={post.image}
                 alt="post_img"
             />
@@ -175,7 +178,7 @@ const Post = ({ post }) => {
                     placeholder='Add a comment...'
                     value={text}
                     onChange={changeEventHandler}
-                    className='outline-none text-sm w-full'
+                    className='outline-none text-sm w-full dark:bg-black'
                 />
                 {
                     text && <span onClick={commentHandler} className='text-[#3BADF8] cursor-pointer'>Post</span>

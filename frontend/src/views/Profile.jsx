@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar'
 import useGetUserProfile from '@/hooks/useGetUserProfile';
 import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
 import { AtSign, Heart, MessageCircle } from 'lucide-react';
 
 const Profile = () => {
@@ -25,7 +25,7 @@ const Profile = () => {
   const displayedPost = activeTab === 'posts' ? userProfile?.posts : userProfile?.bookmarks;
 
   return (
-    <div className='flex max-w-5xl justify-center mx-auto pl-10'>
+    <div className='flex max-w-5xl justify-center pl-10 container'>
       <div className='flex flex-col gap-20 p-8'>
         <div className='grid grid-cols-2'>
           <section className='flex items-center justify-center'>

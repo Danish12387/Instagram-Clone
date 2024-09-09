@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { setSelectedUser } from '@/redux/authSlice';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
 import { MessageCircleCode } from 'lucide-react';
-import Messages from './Messages';
+import Messages from '../components/Messages';
 import axios from 'axios';
 import { setMessages } from '@/redux/chatSlice';
 
