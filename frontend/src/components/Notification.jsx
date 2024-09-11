@@ -35,9 +35,9 @@ export function Notification({ item }) {
                     <SheetDescription>
                         {
                             likeNotification.length === 0 ? (<p>No new notification</p>) : (
-                                likeNotification?.map((notification, index) => {
+                                likeNotification?.map((notification) => {
                                     return (
-                                        <Link to={`/profile/${notification.userId}`} key={index}>
+                                        <Link to={`/profile/${notification.userId}`} key={notification.userId}>
                                             <div key={notification.userId} className='flex items-center gap-2 my-2 hover:bg-gray-100 p-2 rounded-lg dark:hover:bg-gray-950'>
                                                 <Avatar>
                                                     <AvatarImage src={notification.userDetails?.profilePicture} />
