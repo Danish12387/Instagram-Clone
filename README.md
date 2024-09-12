@@ -3,7 +3,7 @@
 <p>In the .env file, you will need to include the following variables:</p>
 <p>PORT=8000<p/>
 <p>MONGO_URI=""</p>
-<p>SECRET_KEY=</p>
-<p>API_KEY=</p>
-<p>API_SECRET=</p>
-<p>CLOUD_NAME=</p>
+<p>SECRET_KEY=(JWT Secret Key)</p>
+<p>API_KEY=(Cloudinary API Key)</p>
+<p>API_SECRET=(Cloudinary API Secret)</p>
+<p>CLOUD_NAME=(Cloudinary Cloud name)</p>
