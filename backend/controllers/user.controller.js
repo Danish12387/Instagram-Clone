@@ -58,13 +58,13 @@ export const login = async (req, res) => {
             });
         };
 
-        const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+        const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
 
         // populate each post if in the posts array
         const populatedPosts = await Promise.all(
-            user.posts.map( async (postId) => {
+            user.posts.map(async (postId) => {
                 const post = await Post.findById(postId);
-                if(post.author.equals(user._id)){
+                if (post.author.equals(user._id)) {
                     return post;
                 }
                 return null;
@@ -103,7 +103,7 @@ export const logout = async (_, res) => {
 export const getProfile = async (req, res) => {
     try {
         const userId = req.params.id;
-        let user = await User.findById(userId).populate({path:'posts', createdAt:-1}).populate('bookmarks');
+        let user = await User.findById(userId).populate({ path: 'posts', createdAt: -1 }).populate('bookmarks');
         return res.status(200).json({
             user,
             success: true

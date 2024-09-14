@@ -44,6 +44,8 @@ const CreatePost = ({ open, setOpen }) => {
       if (res.data.success) {
         dispatch(setPosts([res.data.post, ...posts]));// [1] -> [1,2] -> total element = 2
         toast.success(res.data.message);
+        setCaption('');
+        setImagePreview('');
         setOpen(false);
       }
     } catch (error) {
