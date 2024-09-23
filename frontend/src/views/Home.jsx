@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom'
 import RightSidebar from '../components/RightSidebar'
 import useGetAllPost from '@/hooks/useGetAllPost'
 import useGetSuggestedUsers from '@/hooks/useGetSuggestedUsers'
+import TopLoading from '@/components/topLoading'
 
 const Home = () => {
     useGetAllPost();
@@ -11,6 +12,7 @@ const Home = () => {
 
     return (
         <div className='flex container justify-between'>
+            <TopLoading />
             <div className='flex-grow'>
                 <Feed />
                 <Outlet />

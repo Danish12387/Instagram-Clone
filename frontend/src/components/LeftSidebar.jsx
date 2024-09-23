@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
 import axios from 'axios'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAuthUser } from '@/redux/authSlice'
 import CreatePost from './CreatePost'
@@ -12,6 +12,7 @@ import { clearNotifications } from '@/redux/rtnSlice';
 import { Notification } from './Notification'
 import { ModeToggle } from './mode-toggle'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import SearchUser from './SearchUser';
 
 const LeftSidebar = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const LeftSidebar = () => {
     const [open, setOpen] = useState(false);
     const [openMenu, setOpenMenu] = useState(false);
     const { pathname } = useLocation();
+    const [openSearch, setOpenSearch] = useState(false);
     // const [isNewNoti, setIsNewNoti] = useState([]);
     // useEffect(() => {
     //     setIsNewNoti(likeNotification);
@@ -54,6 +56,8 @@ const LeftSidebar = () => {
             dispatch(clearNotifications());
         } else if (textType === "More") {
             setOpenMenu(true);
+        } else if (textType === "Search") {
+            setOpenSearch(true);
         }
     }
 
@@ -80,17 +84,22 @@ const LeftSidebar = () => {
     return (
         <div className={`fixed top-0 z-10 left-0 px-4 border-r border-gray-600 h-screen`}>
             <div className='flex flex-col'>
-                {/* <h1 className='my-8 pl-3 font-bold text-xl'>LOGO</h1> */}
-
                 {
                     pathname === "/chat" ?
-                        <div className='h-8 mt-10 mb-6 mx-auto'>
+                        <a href="/" className='h-8 mt-10 mb-6 mx-auto'>
                             <img className='h-full' src="/insta-logo.png" alt="Instagram Logo" />
-                        </div>
+                        </a>
                         :
-                        <div className='h-8 mt-10 mb-6 pl-3'>
-                            <img className='h-full' src="/insta-text.png" alt="Instagram Logo" />
-                        </div>
+                        (
+                            <>
+                                <a href="/" className='h-8 mt-10 mb-6 pl-3 hidden lg:block'>
+                                    <img className='h-full' src="/insta-text.png" alt="Instagram Logo" />
+                                </a>
+                                <a href="/" className='h-8 mt-10 mb-6 mx-auto block lg:hidden'>
+                                    <img className='h-full' src="/insta-logo.png" alt="Instagram Logo" />
+                                </a>
+                            </>
+                        )
                 }
 
                 <div>
@@ -102,7 +111,7 @@ const LeftSidebar = () => {
                                         <div className={`flex items-center ${pathname !== '/chat' && 'xl:pr-16'} gap-3 hover:bg-gray-100 dark:hover:bg-gray-950 cursor-pointer rounded-lg p-3 my-3`}>
                                             {item.icon}
 
-                                            {pathname !== '/chat' && <span className='xl:block hidden font-semibold'>{item.text}</span>}
+                                            {pathname !== '/chat' && <span className='lg:block hidden font-semibold'>{item.text}</span>}
                                         </div>
                                     ) : (
                                         <Notification item={item} />
@@ -113,7 +122,7 @@ const LeftSidebar = () => {
                     }
                 </div>
             </div>
-
+            <SearchUser open={openSearch} setOpen={setOpenSearch} />
             <CreatePost open={open} setOpen={setOpen} />
 
             <Popover open={openMenu}>

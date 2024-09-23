@@ -8,7 +8,7 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 import { useSelector } from 'react-redux';
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -22,9 +22,9 @@ export function Notification({ item }) {
 
     return (
         <Sheet key={side} >
-            <SheetTrigger className={`flex items-center relative gap-3 hover:bg-gray-100 dark:hover:bg-gray-950 cursor-pointer rounded-lg p-3 ${pathname !== '/chat' && 'xl:pr-16'} my-3`}>
+            <SheetTrigger className={`flex items-center relative gap-3 hover:bg-gray-100 dark:hover:bg-gray-950 cursor-pointer rounded-lg p-3 ${pathname !== '/chat' && 'lg:pr-16'} my-3`}>
                 {item.icon}
-                {pathname !== '/chat' && <span className='xl:block hidden font-semibold'>{item.text}</span>}
+                {pathname !== '/chat' && <span className='lg:block hidden font-semibold'>{item.text}</span>}
                 {isNewNotification.length > 0 && (
                     <Button size='icon' className="rounded-full h-5 w-5 bg-red-600 hover:bg-red-600 absolute bottom-6 left-6">{isNewNotification.length}</Button>
                 )}

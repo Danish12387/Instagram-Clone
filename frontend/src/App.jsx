@@ -43,7 +43,7 @@ function App() {
   }, [user, dispatch]);
 
   return (
-    <div className='dark:bg-black dark:text-white'>
+    <div className='dark:bg-black dark:text-white min-h-screen'>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Router />
     </ThemeProvider>

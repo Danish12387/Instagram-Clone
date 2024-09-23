@@ -1,22 +1,31 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar'
 import useGetUserProfile from '@/hooks/useGetUserProfile';
-import { Link, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { AtSign, Heart, MessageCircle } from 'lucide-react';
+import { setSelectedUser } from '@/redux/authSlice';
+import CommentDialog from '@/components/CommentDialog';
+import { followUnfollowHandler } from '@/utils/apiHandlers';
+import { setSelectedPost } from '@/redux/postSlice';
+import TopLoading from '@/components/topLoading';
 
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
-  useGetUserProfile(userId);
   const [activeTab, setActiveTab] = useState('posts');
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { userProfile, user } = useSelector(store => store.auth);
 
   const isLoggedInUserProfile = user?._id === userProfile?._id;
-  const isFollowing = false;
+  const isFollowing = user.following.includes(userId);
+
+  useGetUserProfile(userId);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -24,8 +33,14 @@ const Profile = () => {
 
   const displayedPost = activeTab === 'posts' ? userProfile?.posts : userProfile?.bookmarks;
 
+  const startChatHandler = () => {
+    dispatch(setSelectedUser(userProfile));
+    navigate('/chat');
+  }
+
   return (
-    <div className='flex max-w-5xl justify-center pl-10 container'>
+    <div className='flex max-w-5xl justify-center pl-10 container min-h-screen ml-56 2xl:mx-auto'>
+      <TopLoading />
       <div className='flex flex-col gap-20 p-8'>
         <div className='grid grid-cols-2'>
           <section className='flex items-center justify-center'>
@@ -48,11 +63,11 @@ const Profile = () => {
                   ) : (
                     isFollowing ? (
                       <>
-                        <Button variant='secondary' className='h-8'>Unfollow</Button>
-                        <Button variant='secondary' className='h-8'>Message</Button>
+                        <Button onClick={followUnfollowHandler} variant='secondary' className='h-8'>Following</Button>
+                        <Button onClick={startChatHandler} variant='secondary' className='h-8'>Message</Button>
                       </>
                     ) : (
-                      <Button className='bg-[#0095F6] hover:bg-[#3192d2] h-8'>Follow</Button>
+                      <Button onClick={followUnfollowHandler} className='bg-[#0095F6] hover:bg-[#3192d2] h-8'>Follow</Button>
                     )
                   )
                 }
@@ -65,8 +80,6 @@ const Profile = () => {
               <div className='flex flex-col gap-1'>
                 <span className='font-semibold'>{userProfile?.bio || 'bio here...'}</span>
                 <Badge className='w-fit' variant='secondary'><AtSign /> <span className='pl-1'>{userProfile?.username}</span> </Badge>
-                <span>🤯Learn code with patel mernstack style</span>
-                <span>🤯Turing code into fun</span>
                 <span>🤯DM for collaboration</span>
               </div>
             </div>
@@ -84,10 +97,16 @@ const Profile = () => {
             <span className='py-3 cursor-pointer'>TAGS</span>
           </div>
           <div className='grid grid-cols-3 gap-1'>
+            {/* {
+              userProfile.posts && <div>No Posts Yet</div>
+            } */}
             {
               displayedPost?.map((post) => {
                 return (
-                  <div key={post?._id} className='relative group cursor-pointer'>
+                  <div onClick={() => {
+                    setOpen(true);
+                    dispatch(setSelectedPost(post));
+                  }} key={post?._id} className='relative group cursor-pointer'>
                     <img src={post.image} alt='postimage' className='rounded-sm my-2 w-full aspect-square object-cover' />
                     <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
                       <div className='flex items-center text-white space-x-4'>
@@ -105,6 +124,7 @@ const Profile = () => {
                 )
               })
             }
+            < CommentDialog open={open} setOpen={setOpen} />
           </div>
         </div>
       </div>

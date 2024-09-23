@@ -9,17 +9,21 @@ import Comment from './Comment'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { setPosts } from '@/redux/postSlice'
+import { bookmarkHandler, deletePostHandler, followUnfollowHandler } from '@/utils/apiHandlers';
 
 const CommentDialog = ({ open, setOpen }) => {
   const [text, setText] = useState("");
   const { selectedPost, posts } = useSelector(store => store.post);
-  const { API_END_POINT } = useSelector(store => store.auth);
+  const { user, API_END_POINT } = useSelector(store => store.auth);
   const [comment, setComment] = useState([]);
   const dispatch = useDispatch();
 
+  const isFollowing = user?.following?.includes(selectedPost?.author?._id);
+  const isBookmarked = user?.bookmarks?.includes(selectedPost?._id);
+
   useEffect(() => {
     if (selectedPost) {
-      setComment(selectedPost.comments);
+      setComment(selectedPost?.comments);
     }
   }, [selectedPost]);
 
@@ -90,12 +94,15 @@ const CommentDialog = ({ open, setOpen }) => {
                     <MoreHorizontal className='cursor-pointer' />
                   </DialogTrigger>
                   <DialogContent className="flex flex-col items-center text-sm text-center">
-                    <div className='cursor-pointer w-full text-[#ED4956] font-bold'>
-                      Unfollow
-                    </div>
-                    <div className='cursor-pointer w-full dark:text-white'>
-                      Add to favorites
-                    </div>
+                    {
+                      selectedPost?.author?._id !== user?._id && (
+                        <Button onClick={() => followUnfollowHandler(selectedPost?.author._id, dispatch, API_END_POINT)} variant='ghost' className="cursor-pointer w-fit text-[#ED4956] font-bold">{isFollowing ? "Following" : "Follow"}</Button>
+                      )
+                    }
+                    {
+                      user && user?._id === selectedPost?.author._id && <Button onClick={() => deletePostHandler(selectedPost, posts, dispatch, API_END_POINT)} variant='ghost' className="text-[#ED4956] cursor-pointer w-fit">Delete</Button>
+                    }
+                    <Button onClick={() => bookmarkHandler(selectedPost, dispatch, API_END_POINT)} variant='ghost' className="cursor-pointer w-fit dark:text-white">{isBookmarked ? "Remove from Bookmarks" : "Add to Bookmarks"}</Button>
                   </DialogContent>
                 </Dialog>
               </div>
