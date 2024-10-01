@@ -24,7 +24,9 @@ const corsOptions = {
     credentials: true
 }
 app.use(cors(corsOptions));
-
+app.get("/", (req, res) => {
+    res.send("Hello World");
+})
 // yha pr apni api ayengi
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
