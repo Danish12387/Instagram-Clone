@@ -11,7 +11,7 @@ export const addNewPost = async (req, res) => {
         const image = req.file;
         const authorId = req.id;
 
-        if (!image) return res.status(400).json({ message: 'Image required' });
+        if (!image) return res.status(400).json({ message: 'Image is required' });
 
         // image upload
         const optimizedImageBuffer = await sharp(image.buffer)

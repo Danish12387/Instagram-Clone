@@ -8,7 +8,7 @@ const useGetUserProfile = (userId) => {
     const dispatch = useDispatch();
     const { API_END_POINT } = useSelector(store => store.auth);
     // const [userProfile, setUserProfile] = useState(null);
-    
+
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
